@@ -14,33 +14,19 @@ $(function () {
 
   var today=dayjs().format('dddd, MMMM DD');
   $('#currentDay').text(today);
-  var currentHour=dayjs().$H;
+
   console.log(dayjs().$H);
 
-console.log($("#hour-9").data("hour"))
-
-$('#hour-9,#hour-10,#hour-11,#hour-12,#hour-13,#hour-14,#hour-15,#hour-16,#hour-17').each(function(){
-  var dataHour=$(this).data("hour");
-  if(dataHour>currentHour){
-    $(this).removeClass('future');
-    $(this).removeClass('present');
-    $(this).addClass('past');
-  }
-  else if(dataHour<currentHour){
-    $(this).addClass('future');
-    $(this).removeClass('present');
-    $(this).removeClass('past');
-  }
-  else{
-    $(this).removeClass('future');
-    $(this).addClass('present');
-    $(this).removeClass('past');
-  }
+console.log($("#hour-9").data("hour"));
 
 
-  // console.log(elementID);
-
+$(".saveBtn").on("click",function(event){
+  var element=event.target;
+  console.log($(element).parents());
 })
+
+blockColor();
+
 
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
@@ -61,3 +47,27 @@ $('#hour-9,#hour-10,#hour-11,#hour-12,#hour-13,#hour-14,#hour-15,#hour-16,#hour-
   //
   // TODO: Add code to display the current date in the header of the page.
 });
+
+function blockColor(){
+  var currentHour=dayjs().$H;
+  $('#hour-9,#hour-10,#hour-11,#hour-12,#hour-13,#hour-14,#hour-15,#hour-16,#hour-17').each(function(){
+    var dataHour=$(this).data("hour");
+    if(dataHour>currentHour){
+      $(this).removeClass('future');
+      $(this).removeClass('present');
+      $(this).addClass('past');
+    }
+    else if(dataHour<currentHour){
+      $(this).addClass('future');
+      $(this).removeClass('present');
+      $(this).removeClass('past');
+    }
+    else{
+      $(this).removeClass('future');
+      $(this).addClass('present');
+      $(this).removeClass('past');
+    }
+  })
+}
+
+
