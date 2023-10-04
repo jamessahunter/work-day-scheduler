@@ -6,23 +6,89 @@
 //call jquery in html
 
 
+// var storedinitials=JSON.parse(localStorage.getItem("initials"));
+// localStorage.setItem("initials",JSON.stringify(initials));
+// var initial=initials[i];
+
+function init(){
+
+var storedEvents=JSON.parse(localStorage.getItem("events"));
+  if (storedEvents!==null){
+    events=storedEvents;
+  }
+  else{
+    events = new Array(9);
+  }
+}
+
+// if (storedScores !==null){
+//   scores=storedScores;
+//   initials=storedinitials
+// }  
+
+// initialsText = initialsInput.value;
+
+// initials.push(initialsText);
+function storeEvents(){
+  localStorage.setItem("events",JSON.stringify(events));
+
+}
+
+function renderEvents(){
+
+  blocks=$(".time-block > textarea");
+  console.log(events);
+  for (let i = 0; i < 9; i++) {
+    if(events[i]!==null){
+    var event=events[i];
+    console.log("worls");
+    $(blocks[i]).append(event);
+    }
+  }
+}
 
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
+  eventsStored=[];
+  // let events = new Array(9);
+
+  // console.log($(".time-block > textarea"));
+  // $(".time-block > textarea").append("test");
+  // blocks=$(".time-block > textarea");
+  // console.log(blocks[0]);
+  // $(blocks[0]).append("test");
+  // let events = new Array(9); // creates an array with 5 placeholders
+  // console.log(myArray); // [undefined, undefined, undefined, undefined, undefined]
+  // console.log(events);
+  init();
+
+  renderEvents();
+
 
   var today=dayjs().format('dddd, MMMM DD');
   $('#currentDay').text(today);
 
-  console.log(dayjs().$H);
+//   console.log(dayjs().$H);
 
-console.log($("#hour-9").data("hour"));
+// console.log($("#hour-9").data("hour"));
 
 
 $(".saveBtn").on("click",function(event){
   var element=event.target;
-  console.log($(element).parents());
+  var index=$(element).parents(".time-block").data("hour");
+
+  var eventText=$(element).siblings(".description").val();
+  console.log(eventText);
+  // events.push(eventText);
+  // console.log(events);
+  events.splice(index-9,0,eventText);
+  // events[(index-9)]=eventText;
+  console.log(events);
+
+
+
 })
 
 blockColor();
