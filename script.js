@@ -10,134 +10,126 @@
 // localStorage.setItem("initials",JSON.stringify(initials));
 // var initial=initials[i];
 
-function init(){
-
-var storedEvents=JSON.parse(localStorage.getItem("events"));
-  if (storedEvents!==null){
-    events=storedEvents;
-  }
-  else{
-    events = new Array(9);
-  }
-}
-
-// if (storedScores !==null){
-//   scores=storedScores;
-//   initials=storedinitials
-// }  
-
-// initialsText = initialsInput.value;
-
-// initials.push(initialsText);
-
-
 
 
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
-
+//calls block color function
+  blockColor();
+//call initial function
   init();
-
+//calls render events function
   renderEvents();
-  // var advancedFormat = require('dayjs/plugin/advancedFormat')
-  // dayjs.extend(advancedFormat)
-
-  var today=dayjs().format('dddd, MMMM D');
-  $('#currentDay').text(today);
-
-
-$(".time-block").on("click",".saveBtn",function(event){
-  var element=event.target;
-
-  var index=$(element).parents(".time-block").data("hour");
-  var attribute = $(element).attr("class");
-  console.log(attribute);
-if(attribute[0]==='f'){
-  var eventText=$(element).parent().siblings(".description").val();
-}
-else{
-  var eventText=$(element).siblings(".description").val();
-}
-
-  // console.log(index);
-  // console.log($(element).parent());
-
-
-  // console.log($(element).siblings(".description"));
-
-  // console.log(events);
-  events[(index-9)]=eventText;
-  // console.log(events);
-  renderEvents();
-  storeEvents(events);
-})
-
-
-function storeEvents(events){
-  localStorage.setItem("events",JSON.stringify(events));
-  // console.log(events);
-
-}
-
-function renderEvents(){
-
-  blocks=$(".time-block > textarea");
-  // console.log(events);
-  for (let i = 0; i < 9; i++) {
-    if(events[i]!==null){
-    var event=events[i];
-    // console.log("worls");
-    $(blocks[i]).text(event);
-    }
-  }
-}
-
-
-blockColor();
-
-
-
+//calls get today function
+  getToday();
+//event listener for a click on the button
+$(".time-block").on("click",".saveBtn",saveButtonClicked)
 });
 
+//function to determine the color of the block
 function blockColor(){
+  //gets the current hour of the day 
   var currentHour=dayjs().$H;
-  $('#hour-9,#hour-10,#hour-11,#hour-12,#hour-13,#hour-14,#hour-15,#hour-16,#hour-17').each(function(){
+  //selects each time block
+    $('.time-block').each(function(){
+      //gets the data corresponding to the hour number for each time block
     var dataHour=$(this).data("hour");
+    //checks to see if the hour of the time block is greater than the current hour
     if(dataHour>currentHour){
+      //adds the class past and removes both of the other options
       $(this).removeClass('future');
       $(this).removeClass('present');
       $(this).addClass('past');
     }
+    //checks to see if the hour of the time block is less than the current hour
     else if(dataHour<currentHour){
+      //adds the class future and removes the other options
       $(this).addClass('future');
       $(this).removeClass('present');
       $(this).removeClass('past');
     }
+    //else for time block is the current hour
     else{
+      //add the class present and removes the other options
       $(this).removeClass('future');
       $(this).addClass('present');
       $(this).removeClass('past');
     }
   })
 }
+//intial function
+function init(){
+  //pulls stored events and parses them
+  var storedEvents=JSON.parse(localStorage.getItem("events"));
 
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
+  //checks to see if the object is poplated
+    if (storedEvents!==null){
+      //put the array into the events variable
+      events=storedEvents;
+    }
+    else{
+      //if the array is empty create an array of length 9 the has placeholders
+      events = new Array(9);
+    }
+  }
+  //function for rendering the events
+  function renderEvents(){
+    //creates the variable blocks by taking the child element text area from each time block
+    blocks=$(".time-block > textarea");
+    //a for loop to go through all time blocks
+    for (let i = 0; i < 9; i++) {
+      //if the index of the array is not empty
+      if(events[i]!==null){
+        //create a varaible for that index
+      var event=events[i];
+      //insert that text into the time block
+      $(blocks[i]).text(event);
+      }
+    }
+  }
+//gets todays day of the week
+  function getToday(){
+    //uses day.js to get the day of the week and the month and day
+    var today=dayjs().format('dddd, MMMM D');
+    //inserts that text onto the page
+    $('#currentDay').text(today);
+  }
+
+  //stores the events in local storage
+function storeEvents(){
+  //sets the events into a string for storage 
+  localStorage.setItem("events",JSON.stringify(events));
+}
+
+//called once the save button is clicked
+function saveButtonClicked(event){
+  //gets the elements that was clicked on
+  var element=event.target;
+  //finds which block was clicked on
+  var index=$(element).parents(".time-block").data("hour");
+  //determines if the icon or button was clicked
+  var attribute = $(element).attr("class");
+  //checks if the icon was clicked on
+  if(attribute[0]==='f'){
+    //gets the text that was entered
+    var eventText=$(element).parent().siblings(".description").val();
+  }
+  // for when the button is clicked
+  else{
+    //gets the text that was entered
+    var eventText=$(element).siblings(".description").val();
+  }
+  //puts the entered text into the events array
+  events[(index-9)]=eventText;
+
+  //calls the render events and store events functions
+  renderEvents();
+  storeEvents();
+
+}
+
+
+
+
