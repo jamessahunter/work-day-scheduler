@@ -1,17 +1,3 @@
-//event listener on button
-//save to local storage 
-//check time change classes
-//get current time
-//use jquery
-//call jquery in html
-
-
-// var storedinitials=JSON.parse(localStorage.getItem("initials"));
-// localStorage.setItem("initials",JSON.stringify(initials));
-// var initial=initials[i];
-
-
-
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
