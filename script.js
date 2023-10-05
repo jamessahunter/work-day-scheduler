@@ -29,89 +29,76 @@ var storedEvents=JSON.parse(localStorage.getItem("events"));
 // initialsText = initialsInput.value;
 
 // initials.push(initialsText);
-function storeEvents(){
+
+
+
+
+// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
+// the code isn't run until the browser has finished rendering all the elements
+// in the html.
+$(function () {
+
+  init();
+
+  renderEvents();
+  // var advancedFormat = require('dayjs/plugin/advancedFormat')
+  // dayjs.extend(advancedFormat)
+
+  var today=dayjs().format('dddd, MMMM D');
+  $('#currentDay').text(today);
+
+
+$(".time-block").on("click",".saveBtn",function(event){
+  var element=event.target;
+
+  var index=$(element).parents(".time-block").data("hour");
+  var attribute = $(element).attr("class");
+  console.log(attribute);
+if(attribute[0]==='f'){
+  var eventText=$(element).parent().siblings(".description").val();
+}
+else{
+  var eventText=$(element).siblings(".description").val();
+}
+
+  // console.log(index);
+  // console.log($(element).parent());
+
+
+  // console.log($(element).siblings(".description"));
+
+  // console.log(events);
+  events[(index-9)]=eventText;
+  // console.log(events);
+  renderEvents();
+  storeEvents(events);
+})
+
+
+function storeEvents(events){
   localStorage.setItem("events",JSON.stringify(events));
+  // console.log(events);
 
 }
 
 function renderEvents(){
 
   blocks=$(".time-block > textarea");
-  console.log(events);
+  // console.log(events);
   for (let i = 0; i < 9; i++) {
     if(events[i]!==null){
     var event=events[i];
-    console.log("worls");
-    $(blocks[i]).append(event);
+    // console.log("worls");
+    $(blocks[i]).text(event);
     }
   }
 }
 
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
-$(function () {
-  eventsStored=[];
-  // let events = new Array(9);
-
-  // console.log($(".time-block > textarea"));
-  // $(".time-block > textarea").append("test");
-  // blocks=$(".time-block > textarea");
-  // console.log(blocks[0]);
-  // $(blocks[0]).append("test");
-  // let events = new Array(9); // creates an array with 5 placeholders
-  // console.log(myArray); // [undefined, undefined, undefined, undefined, undefined]
-  // console.log(events);
-  init();
-
-  renderEvents();
-
-
-  var today=dayjs().format('dddd, MMMM DD');
-  $('#currentDay').text(today);
-
-//   console.log(dayjs().$H);
-
-// console.log($("#hour-9").data("hour"));
-
-
-$(".saveBtn").on("click",function(event){
-  var element=event.target;
-  var index=$(element).parents(".time-block").data("hour");
-
-  var eventText=$(element).siblings(".description").val();
-  console.log(eventText);
-  // events.push(eventText);
-  // console.log(events);
-  events.splice(index-9,0,eventText);
-  // events[(index-9)]=eventText;
-  console.log(events);
-
-
-
-})
 
 blockColor();
 
 
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
+
 });
 
 function blockColor(){
@@ -136,4 +123,21 @@ function blockColor(){
   })
 }
 
-
+  // TODO: Add a listener for click events on the save button. This code should
+  // use the id in the containing time-block as a key to save the user input in
+  // local storage. HINT: What does `this` reference in the click listener
+  // function? How can DOM traversal be used to get the "hour-x" id of the
+  // time-block containing the button that was clicked? How might the id be
+  // useful when saving the description in local storage?
+  //
+  // TODO: Add code to apply the past, present, or future class to each time
+  // block by comparing the id to the current hour. HINTS: How can the id
+  // attribute of each time-block be used to conditionally add or remove the
+  // past, present, and future classes? How can Day.js be used to get the
+  // current hour in 24-hour time?
+  //
+  // TODO: Add code to get any user input that was saved in localStorage and set
+  // the values of the corresponding textarea elements. HINT: How can the id
+  // attribute of each time-block be used to do this?
+  //
+  // TODO: Add code to display the current date in the header of the page.
